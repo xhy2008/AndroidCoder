@@ -54,7 +54,7 @@ Release 构建默认使用 debug 签名配置，可直接安装。若需自有�
 
 | 层 | 说明 |
 |----|------|
-| 容器运行时 | [proroot](https://github.com/falkTX/proroot)：LD_PRELOAD 实现 rootless 根文件系统重定向 |
+| 容器运行时 | [proroot](https://github.com/coderredlab/proroot)：LD_PRELOAD 实现 rootless 根文件系统重定向 |
 | 文件系统 | 预置 Debian rootfs（`assets/rootfs/layer.dat`） |
 | PTY 桥接 | C 模块（`cpp/pty.c`）通过 JNI 暴露伪终端接口 |
 | AI Agent | 通过 OpenAI / Anthropic 兼容 API 调用大模型，流式 SSE 解析 |
