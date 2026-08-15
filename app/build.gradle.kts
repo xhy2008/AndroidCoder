@@ -38,7 +38,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("../my-release-key.keystore")
+            storeFile = file("E:/Android-Coder/my-release-key.keystore")
             storePassword = "xhy080925"
             keyAlias = "coderagent"
             keyPassword = "xhy080925"
