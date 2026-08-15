@@ -36,12 +36,20 @@ android {
         noCompress += "dat"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("../my-release-key.keystore")
+            storePassword = "xhy080925"
+            keyAlias = "coderagent"
+            keyPassword = "xhy080925"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            // 无正式 keystore，使用 debug 签名，保证 release APK 可安装（正式发布时替换为自有签名）
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 

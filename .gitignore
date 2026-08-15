@@ -1,6 +1,7 @@
 # Gradle
 .gradle/
 build/
+.kotlin/
 */build/
 local.properties
 
@@ -16,11 +17,8 @@ app/build/
 app/.cxx/
 app/.externalNativeBuild/
 
-# Generated files
-app/src/main/java/com/coderagent/android/R.java
-app/src/main/java/com/coderagent/android/BuildConfig.java
-
 # Releases
 *.apk
 *.aab
 *.keystore
+*.jks
