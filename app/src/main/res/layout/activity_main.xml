@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="4dp">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/primary"
+                app:title="@string/app_name"
+                app:titleTextColor="@color/text_on_primary"
+                app:subtitleTextColor="#CCFFFFFF">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingEnd="16dp">
+
+                    <ImageView
+                        android:id="@+id/status_dot"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:contentDescription="@string/container_status"
+                        android:src="@drawable/dot_status" />
+
+                    <TextView
+                        android:id="@+id/status_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="6dp"
+                        android:text="@string/container_running_notif_text"
+                        android:textColor="#CCFFFFFF"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:padding="12dp"
+            android:scrollbars="vertical" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/input_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surface_dark"
+            android:padding="8dp">
+
+            <EditText
+                android:id="@+id/input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/bg_input_box"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:maxLines="4"
+                android:minLines="1"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:textColor="#F5F5F5"
+                android:textColorHint="#9E9E9E"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btn_send"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- 输入框右上角悬浮展开图标（透明、不占空间，展开后旋转为收起方向） -->
+            <ImageView
+                android:id="@+id/btn_expand"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_marginTop="9dp"
+                android:layout_marginEnd="6dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/btn_expand"
+                android:src="@drawable/ic_expand"
+                app:layout_constraintEnd_toEndOf="@id/input"
+                app:layout_constraintTop_toTopOf="@id/input" />
+
+            <!-- 发送/停止：宽度贴合文字、高度与输入框一致（尖角无缝衔接） -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_send"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:minWidth="0dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:text="@string/btn_send"
+                android:textSize="14sp"
+                app:cornerRadius="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/input" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <include
+        android:id="@+id/session_drawer"
+        layout="@layout/drawer_content" />
+</androidx.drawerlayout.widget.DrawerLayout>

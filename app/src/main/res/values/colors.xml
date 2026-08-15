@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#3F51B5</color>
+    <color name="primary_dark">#303F9F</color>
+    <color name="accent">#FF4081</color>
+    <color name="bg">#121212</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="bubble_user">#3F51B5</color>
+    <color name="bubble_assistant">#2A2A2E</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="tool_card_bg">#2A2A2E</color>
+    <color name="text_primary">#E0E0E0</color>
+    <color name="text_secondary">#9E9E9E</color>
+    <color name="status_ok">#4CAF50</color>
+    <color name="status_warn">#FF9800</color>
+    <color name="status_err">#F44336</color>
+    <color name="btn_danger">#D32F2F</color>
+</resources>

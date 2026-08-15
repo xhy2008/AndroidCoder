@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="4dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:title="@string/terminal_title"
+            app:titleTextColor="@color/text_on_primary" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.coderagent.android.TerminalView
+            android:id="@+id/terminal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#101418"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:minWidth="56dp"
+            android:text="复制"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <com.coderagent.android.ExtraKeysView
+        android:id="@+id/extra_keys"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
