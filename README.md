@@ -2,6 +2,8 @@
 
 基于 proroot（rootless 容器运行时）+ Debian rootfs 的 Android 编码 Agent 应用。
 
+![image-20260817113059468](./screenshot.jpg)
+
 - 容器内运行完整 Debian（glibc），提供 shell / 文件 / 编译等编码能力
 - AI Agent 驱动任务循环：思考 → 工具调用 → 回答，流式输出
 - 工具集：read_file / write_file / edit_file / delete_file / list_dir / glob / grep / run_command

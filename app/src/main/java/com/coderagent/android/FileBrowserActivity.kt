@@ -66,6 +66,10 @@ class FileBrowserActivity : AppCompatActivity() {
         })
     }
 
+    private val pickImport = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        uri?.let { importFromPhone(it) }
+    }
+
     private val createDoc = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         result.data?.data?.let { uri ->
             pendingExportMulti?.let { paths ->
@@ -378,18 +382,18 @@ class FileBrowserActivity : AppCompatActivity() {
         }
     }
 
-    /** 列表空白区域长按菜单：粘贴（剪贴板为空时置灰不可点） */
+    /** 列表空白区域长按菜单：粘贴（剪贴板为空时置灰不可点） + 从手机存储导入 */
     private fun showEmptyAreaMenu() {
         val hasClipboard = clipboardPaths.isNotEmpty()
-        val items = listOf(getString(R.string.fb_paste))
+        val items = mutableListOf(getString(R.string.fb_paste), getString(R.string.fb_import))
         val adapter = object : ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
             override fun areAllItemsEnabled() = hasClipboard
-            override fun isEnabled(position: Int) = hasClipboard
+            override fun isEnabled(position: Int) = position != 0 || hasClipboard
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val v = super.getView(position, convertView, parent)
                 val tv = v.findViewById<android.widget.TextView>(android.R.id.text1)
                 tv?.setTextColor(
-                    if (hasClipboard) 0xFFF5F5F5.toInt() else 0xFF666666.toInt()
+                    if (position == 0 && !hasClipboard) 0xFF666666.toInt() else 0xFFF5F5F5.toInt()
                 )
                 return v
             }
@@ -397,9 +401,44 @@ class FileBrowserActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(getString(R.string.file_browser_title))
             .setAdapter(adapter) { _, which ->
-                if (which == 0) pasteClipboard()
+                when (which) {
+                    0 -> pasteClipboard()
+                    1 -> pickImport.launch(arrayOf("*/*"))
+                }
             }
             .show()
+    }
+
+    /** 从手机存储 Uri 导入文件到容器当前目录 */
+    private fun importFromPhone(uri: android.net.Uri) {
+        loading = true
+        lifecycleScope.launch {
+            val msg = withContext(Dispatchers.IO) {
+                try {
+                    val name = uri.lastPathSegment?.substringAfterLast('/') ?: "imported"
+                    // 读手机文件到宿主 tmp
+                    val tmp = ContainerRuntime.tmpDir(this@FileBrowserActivity)
+                    val tmpFile = File(tmp, UUID.randomUUID().toString())
+                    contentResolver.openInputStream(uri)?.use { input ->
+                        tmpFile.outputStream().use { input.copyTo(it) }
+                    } ?: return@withContext getString(R.string.fb_import_fail)
+                    // 通过 hosttmp bind mount 复制到容器
+                    val dest = ToolRegistry.shq(dirJoin(currentDir, name))
+                    val r = ContainerRuntime.exec(
+                        this@FileBrowserActivity,
+                        "cp /hosttmp/${tmpFile.name} $dest && echo OK || echo FAIL",
+                        "/root", timeoutSec = 120
+                    )
+                    tmpFile.delete()
+                    if (r.output.contains("OK")) getString(R.string.fb_import_ok) else getString(R.string.fb_import_fail)
+                } catch (e: Exception) {
+                    getString(R.string.fb_import_fail) + ": ${e.message}"
+                }
+            }
+            loading = false
+            Toast.makeText(this@FileBrowserActivity, msg, Toast.LENGTH_SHORT).show()
+            if (msg.startsWith(getString(R.string.fb_import_ok))) goTo(currentDir)
+        }
     }
 
     // ---------- 压缩（宿主侧 zip 打包） ----------
