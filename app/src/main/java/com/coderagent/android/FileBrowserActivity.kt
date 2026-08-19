@@ -415,7 +415,13 @@ class FileBrowserActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val msg = withContext(Dispatchers.IO) {
                 try {
-                    val name = uri.lastPathSegment?.substringAfterLast('/') ?: "imported"
+                    // SAF 的 lastPathSegment 是文档 ID（纯数字），需查询 DISPLAY_NAME 取真实文件名
+                    val name = contentResolver.query(uri, null, null, null, null)?.use { c ->
+                        if (c.moveToFirst()) {
+                            val i = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                            if (i >= 0) c.getString(i) ?: "imported" else "imported"
+                        } else "imported"
+                    } ?: "imported"
                     // 读手机文件到宿主 tmp
                     val tmp = ContainerRuntime.tmpDir(this@FileBrowserActivity)
                     val tmpFile = File(tmp, UUID.randomUUID().toString())
